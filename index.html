@@ -1,1 +1,1036 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pendataan Anggota - Banjar Asri Cyber Comunity</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Poppins', 'sans-serif'] },
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- SheetJS (xlsx) -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
+    <style>
+        .bg-gradient-custom {
+            background: linear-gradient(135deg, #eff6ff 0%, #ffffff 50%, #bfdbfe 100%);
+            background-size: 200% 200%;
+            animation: gradientAnimation 10s ease infinite;
+        }
+
+        .dark .bg-gradient-custom {
+            background: linear-gradient(135deg, #18181b 0%, #27272a 50%, #09090b 100%);
+        }
+
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(147, 197, 253, 0.4);
+        }
+
+        .dark .glass-card {
+            background: rgba(24, 24, 27, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .hover-lift {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .hover-lift:hover {
+            transform: translateY(-4px) scale(1.01);
+            box-shadow: 0 15px 25px -5px rgba(59, 130, 246, 0.2);
+        }
+
+        /* Toast Notification Animation */
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .toast-animate {
+            animation: slideIn 0.3s ease forwards;
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-custom min-h-screen text-gray-800 dark:text-gray-100 font-sans selection:bg-blue-300 selection:text-blue-900 transition-colors duration-300">
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed top-5 right-5 z-50 space-y-3 pointer-events-none"></div>
+
+    <!-- Audio Efek Klik (Web Audio API Synthesizer) -->
+    <script>
+        function playClickSound() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(300, audioCtx.currentTime + 0.05);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.05);
+            } catch (e) {}
+        }
+    </script>
+
+    <!-- ================= PORTAL DEPAN ================= -->
+    <div id="portal-page" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gradient-custom">
+        <div class="glass-card rounded-3xl p-8 md:p-12 max-w-xl w-full text-center shadow-2xl relative overflow-hidden">
+            <div class="absolute -top-12 -left-12 w-40 h-40 bg-blue-300 rounded-full filter blur-3xl opacity-50 dark:opacity-20"></div>
+            <div class="absolute -bottom-12 -right-12 w-40 h-40 bg-sky-300 rounded-full filter blur-3xl opacity-50 dark:opacity-20"></div>
+
+            <div class="relative z-10">
+                <div class="w-20 h-20 bg-gradient-to-tr from-blue-50 to-sky-200 rounded-2xl mx-auto flex items-center justify-center shadow-lg mb-6 transform hover:rotate-6 transition-transform duration-300">
+                      <img src="c:\Users\smk\Downloads\WhatsApp_Image_2026-09-30_at_10.15.52_AM-removebg-preview.png">
+                </div>
+                
+                <span class="px-4 py-1.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300 uppercase tracking-widest border border-blue-300 dark:border-blue-700">
+                    Portal Pendataan
+                </span>
+                
+                <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white mt-4 mb-2">
+                    BANJAR ASRI CYBER COMUNITY
+                </h1>
+                
+                <p class="text-gray-600 dark:text-gray-300 text-sm md:text-base mb-8">
+                    Pendataan Anggota Banjar Asri Cyber Comunity
+                </p>
+
+                <button onclick="playClickSound(); masukWeb()" class="group relative inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white transition-all duration-300 bg-gradient-to-r from-blue-500 to-sky-500 rounded-2xl shadow-lg hover-lift focus:outline-none">
+                    <span class="absolute inset-0 w-full h-full bg-white/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                    <span class="relative flex items-center gap-3">
+                        MASUK
+                        <i class="fa-solid fa-arrow-right-long transform group-hover:translate-x-2 transition-transform"></i>
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= HALAMAN UTAMA ================= -->
+    <div id="main-app" class="opacity-0 pointer-events-none min-h-screen flex flex-col">
+        
+        <!-- Navbar -->
+        <header class="sticky top-0 z-40 backdrop-blur-md bg-white/80 dark:bg-zinc-900/80 border-b border-blue-200 dark:border-blue-700/30 shadow-sm transition-colors duration-300">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+                <div class="flex items-center gap-3 cursor-pointer" onclick="playClickSound(); gantiTab('beranda')">
+                    <div class="w-11 h-11 bg-gradient-to-tr from-blue-100 to-sky-150 rounded-xl flex items-center justify-center shadow-md text-white font-bold text-xl">
+                        <img src="c:\Users\smk\Downloads\WhatsApp_Image_2026-09-30_at_10.15.52_AM-removebg-preview.png">
+                    </div>
+                    <div>
+                        <span class="block font-bold text-gray-900 dark:text-white leading-tight">Banjar Asri Cyber Comunity</span>
+                        <span class="block text-xs font-medium text-blue-700 dark:text-blue-400 tracking-wider">SMK BANJAR ASRI</span>
+                    </div>
+                </div>
+
+                <!-- Desktop Menu -->
+                <nav class="hidden md:flex items-center gap-2 bg-blue-50/80 dark:bg-zinc-800/80 p-1.5 rounded-2xl border border-blue-200 dark:border-zinc-700">
+                    <button onclick="playClickSound(); gantiTab('beranda')" id="nav-beranda" class="nav-btn px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 text-blue-900 bg-white dark:bg-zinc-700 dark:text-blue-300 shadow-sm">
+                        <i class="fa-solid fa-house mr-2"></i> Beranda
+                    </button>
+
+                    <button onclick="playClickSound(); gantiTab('form')" id="nav-form" class="nav-btn px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 text-gray-600 dark:text-gray-300 hover:text-blue-900 dark:hover:text-blue-300">
+                        <i class="fa-solid fa-user-pen mr-2"></i> Isi Data Diri
+                    </button>
+
+                    <button onclick="playClickSound(); gantiTab('murid')" id="nav-murid" class="nav-btn px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 text-gray-600 dark:text-gray-300 hover:text-blue-900 dark:hover:text-blue-300">
+                        <i class="fa-solid fa-users-viewfinder mr-2"></i> Data Anggota <span id="badge-count" class="ml-1.5 px-2 py-0.5 text-xs bg-blue-200 dark:bg-blue-900 text-blue-900 dark:text-blue-300 rounded-full font-bold">0</span>
+                    </button>
+
+                    <button onclick="playClickSound(); gantiTab('profil')" id="nav-profil" class="nav-btn px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 text-gray-600 dark:text-gray-300 hover:text-blue-900 dark:hover:text-blue-300">
+                        <i class="fa-solid fa-school mr-2"></i> Profil Ekskul
+                    </button>
+                </nav>
+
+                <!-- Right Action Buttons -->
+                <div class="flex items-center gap-3">
+                    <button onclick="playClickSound(); toggleDarkMode()" class="p-2.5 rounded-xl bg-blue-100 dark:bg-zinc-800 text-blue-800 dark:text-blue-300 hover:bg-blue-200 transition-colors" title="Ganti Mode">
+                        <i id="dark-icon" class="fa-solid fa-moon text-lg"></i>
+                    </button>
+
+                    <button onclick="playClickSound(); toggleMobileMenu()" class="md:hidden p-2.5 rounded-xl bg-blue-100 dark:bg-zinc-800 text-blue-900 dark:text-blue-300 hover:bg-blue-200 transition-colors">
+                        <i class="fa-solid fa-bars text-lg"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Dropdown -->
+            <div id="mobile-menu" class="hidden md:hidden px-4 pt-2 pb-4 space-y-1 bg-white dark:bg-zinc-900 border-b border-blue-100 dark:border-zinc-800 shadow-lg">
+                <button onclick="playClickSound(); gantiTab('beranda'); toggleMobileMenu();" class="block w-full text-left px-4 py-3 rounded-xl font-medium text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-zinc-800">
+                    <i class="fa-solid fa-house mr-2"></i> Beranda
+                </button>
+
+                <button onclick="playClickSound(); gantiTab('form'); toggleMobileMenu();" class="block w-full text-left px-4 py-3 rounded-xl font-medium text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-zinc-800">
+                    <i class="fa-solid fa-user-pen mr-2"></i> Isi Data Diri
+                </button>
+
+                <button onclick="playClickSound(); gantiTab('murid'); toggleMobileMenu();" class="block w-full text-left px-4 py-3 rounded-xl font-medium text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-zinc-800">
+                    <i class="fa-solid fa-users-viewfinder mr-2"></i> Data Anggota
+                </button>
+
+                <button onclick="playClickSound(); gantiTab('profil'); toggleMobileMenu();" class="block w-full text-left px-4 py-3 rounded-xl font-medium text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-zinc-800">
+                    <i class="fa-solid fa-school mr-2"></i> Profil Ekskul
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Container -->
+        <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            
+            <!-- TAB BERANDA -->
+            <section id="tab-beranda" class="tab-content space-y-10">
+                <div class="glass-card rounded-3xl p-8 md:p-14 relative overflow-hidden shadow-xl hover-lift">
+                    <div class="max-w-2xl relative z-10">
+                        <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300 mb-6 border border-blue-300 dark:border-blue-700">
+                            <i class="fa-solid fa-circle-check text-blue-600 dark:text-blue-400"></i> Tahun Ajaran 2026/2027
+                        </span>
+
+                        <h2 class="text-3xl md:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight leading-tight mb-6">
+                            Selamat Datang di Portal Pendataan Siswa <span class="text-blue-600 dark:text-blue-400">Banjar Asri Cyber Comunity</span>
+                        </h2>
+
+                        <p class="text-gray-600 dark:text-gray-300 text-base md:text-lg mb-8 leading-relaxed">
+                            Silahkan isi data diri dengan benar sesuai form.
+                        </p>
+
+                        <div class="flex flex-wrap gap-4">
+                            <button onclick="playClickSound(); gantiTab('form')" class="px-8 py-4 rounded-2xl bg-gradient-to-r from-blue-500 to-sky-500 text-white font-bold shadow-lg hover-lift flex items-center gap-3">
+                                <i class="fa-solid fa-pen-to-square"></i> Mulai Isi Data Diri
+                            </button>
+
+                            <button onclick="playClickSound(); gantiTab('murid')" class="px-8 py-4 rounded-2xl bg-white dark:bg-zinc-800 text-blue-800 dark:text-blue-300 border-2 border-blue-400 dark:border-blue-600 font-bold hover:bg-blue-50 dark:hover:bg-zinc-700 hover-lift flex items-center gap-3">
+                                <i class="fa-solid fa-address-book"></i> Lihat Data Anggota
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+                    <div class="glass-card p-8 rounded-3xl hover-lift border border-blue-200 dark:border-zinc-700">
+                        <div class="w-14 h-14 rounded-2xl bg-blue-100 dark:bg-zinc-800 text-blue-700 dark:text-blue-400 flex items-center justify-center text-2xl font-bold mb-6 shadow-inner">
+                            <i class="fa-solid fa-calendar-days text-blue-600"></i>
+                        </div>
+
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Kalender Interaktif</h3>
+                        <p class="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
+                            Pilih tanggal lahir dengan mudah lewat kalender instan tanpa repot mengetik manual.
+                        </p>
+                    </div>
+
+                    <div class="glass-card p-8 rounded-3xl hover-lift border border-blue-200 dark:border-zinc-700">
+                        <div class="w-14 h-14 rounded-2xl bg-blue-100 dark:bg-zinc-800 text-blue-700 dark:text-blue-400 flex items-center justify-center text-2xl font-bold mb-6 shadow-inner">
+                            <i class="fa-solid fa-bars-progress text-sky-600"></i>
+                        </div>
+
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Wizard Bertahap</h3>
+                        <p class="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
+                            Pengisian data dibagi per langkah terstruktur dengan bilah progres yang dinamis.
+                        </p>
+                    </div>
+
+                    <div class="glass-card p-8 rounded-3xl hover-lift border border-blue-200 dark:border-zinc-700">
+                        <div class="w-14 h-14 rounded-2xl bg-blue-100 dark:bg-zinc-800 text-blue-700 dark:text-blue-400 flex items-center justify-center text-2xl font-bold mb-6 shadow-inner">
+                            <i class="fa-solid fa-file-excel text-green-600"></i>
+                        </div>
+
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Ekspor Excel Rapi</h3>
+                        <p class="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
+                            Unduh data rekap ke format Excel dengan tata letak profesional berwarna.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB FORMULIR -->
+            <section id="tab-form" class="tab-content hidden max-w-2xl mx-auto">
+                <div class="glass-card rounded-3xl p-8 md:p-12 shadow-xl border border-blue-200 dark:border-zinc-700">
+
+                    <div class="text-center mb-6">
+                        <span class="px-4 py-1.5 rounded-full text-xs font-bold bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300 uppercase tracking-wider">
+                            Formulir Pendaftaran
+                        </span>
+
+                        <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900 dark:text-white mt-3">
+                            Isi Data Diri Siswa
+                        </h2>
+
+                        <p class="text-gray-600 dark:text-gray-300 text-sm mt-1">
+                            Lengkapi data melalui tahapan di bawah ini.
+                        </p>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div class="mb-8">
+                        <div class="flex justify-between text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2">
+                            <span id="step-label-1" class="text-blue-600 dark:text-blue-400">1. Data Pribadi</span>
+                            <span id="step-label-2">2. TTL & Sekolah</span>
+                            <span id="step-label-3">3. Kontak & Alamat</span>
+                        </div>
+
+                        <div class="w-full bg-blue-100 dark:bg-zinc-800 h-2.5 rounded-full overflow-hidden">
+                            <div id="wizard-progress" class="bg-gradient-to-r from-blue-500 to-sky-500 h-full w-1/3 transition-all duration-300"></div>
+                        </div>
+                    </div>
+
+                    <form id="form-siswa" onsubmit="simpanData(event)" class="space-y-6">
+
+                        <!-- STEP 1 -->
+                        <div id="wizard-step-1" class="wizard-step space-y-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                                    Nama Lengkap Siswa
+                                </label>
+
+                                <div class="relative">
+                                    <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-blue-600">
+                                        <i class="fa-solid fa-user"></i>
+                                    </span>
+
+                                    <input type="text" id="nama" required placeholder="Contoh: Muhammad Rizky Pratama"
+                                        class="w-full pl-11 pr-4 py-3.5 bg-white/80 dark:bg-zinc-800 dark:text-white border border-blue-300 dark:border-zinc-700 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm shadow-sm">
+                                </div>
+                            </div>
+
+                            <div class="flex justify-end pt-4">
+                                <button type="button" onclick="playClickSound(); nextWizard(2)"
+                                    class="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-blue-500 to-sky-500 text-white font-bold shadow-lg hover-lift text-sm flex items-center gap-2">
+                                    Selanjutnya <i class="fa-solid fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- STEP 2 -->
+                        <div id="wizard-step-2" class="wizard-step hidden space-y-4">
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                                        Kelas
+                                    </label>
+
+                                    <div class="relative">
+                                        <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-blue-600">
+                                            <i class="fa-solid fa-chalkboard-user"></i>
+                                        </span>
+
+                                        <select id="kelas" required
+                                            class="w-full pl-11 pr-4 py-3.5 bg-white/80 dark:bg-zinc-800 dark:text-white border border-blue-300 dark:border-zinc-700 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm shadow-sm">
+                                            <option value="" disabled selected>Pilih Kelas</option>
+                                            <option value="X (Sepuluh)">X (Sepuluh)</option>
+                                            <option value="XI (Sebelas)">XI (Sebelas)</option>
+                                            <option value="XII (Duabelas)">XII (Duabelas)</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                                        Program Keahlian
+                                    </label>
+
+                                    <div class="relative">
+                                        <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-blue-600">
+                                            <i class="fa-solid fa-laptop-code"></i>
+                                        </span>
+
+                                        <select id="jurusan" required
+                                            class="w-full pl-11 pr-4 py-3.5 bg-white/80 dark:bg-zinc-800 dark:text-white border border-blue-300 dark:border-zinc-700 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm shadow-sm">
+                                            <option value="" disabled selected>Pilih Jurusan</option>
+                                            <option value="Teknik Komputer dan Jaringan (TKJ)">Teknik Komputer dan Jaringan (TKJ)</option>
+                                            <option value="Rekayasa Perangkat Lunak (RPL)">Rekayasa Perangkat Lunak (RPL)</option>
+                                            <option value="Akuntansi dan Keuangan Lembaga (AKL)">Akuntansi dan Keuangan Lembaga (AKL)</option>
+                                            <option value="Otomatisasi dan Tata Kelola Perkantoran (OTKP)">Otomatisasi & Tata Kelola Perkantoran (OTKP)</option>
+                                            <option value="Teknik Kendaraan Ringan (TKR)">Teknik Kendaraan Ringan (TKR)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                                    Tempat Lahir
+                                </label>
+
+                                <input type="text" id="tempat_lahir" required placeholder="Contoh: Bandung"
+                                    class="w-full px-4 py-3.5 bg-white/80 dark:bg-zinc-800 dark:text-white border border-blue-300 dark:border-zinc-700 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm shadow-sm">
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                                    Tanggal Lahir (Pilih via Kalender)
+                                </label>
+
+                                <div class="relative">
+                                    <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-blue-600">
+                                        <i class="fa-solid fa-calendar-days"></i>
+                                    </span>
+
+                                    <input type="date" id="tanggal_lahir" required
+                                        class="w-full pl-11 pr-4 py-3.5 bg-white/80 dark:bg-zinc-800 dark:text-white border border-blue-300 dark:border-zinc-700 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm shadow-sm">
+                                </div>
+                            </div>
+
+                            <div class="flex justify-between pt-4">
+                                <button type="button" onclick="playClickSound(); nextWizard(1)"
+                                    class="px-6 py-3.5 rounded-2xl border border-gray-300 dark:border-zinc-700 text-gray-700 dark:text-gray-300 font-semibold text-sm">
+                                    <i class="fa-solid fa-arrow-left mr-2"></i> Sebelumnya
+                                </button>
+
+                                <button type="button" onclick="playClickSound(); nextWizard(3)"
+                                    class="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-blue-500 to-sky-500 text-white font-bold shadow-lg hover-lift text-sm flex items-center gap-2">
+                                    Selanjutnya <i class="fa-solid fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- STEP 3 -->
+                        <div id="wizard-step-3" class="wizard-step hidden space-y-4">
+
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                                    Alamat Lengkap
+                                </label>
+
+                                <textarea id="alamat" rows="3" required placeholder="Contoh: Kp. Cimaung RT 02/05, Desa Cimaung"
+                                    class="w-full px-4 py-3 bg-white/80 dark:bg-zinc-800 dark:text-white border border-blue-300 dark:border-zinc-700 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm shadow-sm"></textarea>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                                    Nomor Telepon / WhatsApp
+                                </label>
+
+                                <div class="relative">
+                                    <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-blue-600">
+                                        <i class="fa-solid fa-phone"></i>
+                                    </span>
+
+                                    <input type="tel" id="telepon" required placeholder="Contoh: 081234567890"
+                                        class="w-full pl-11 pr-4 py-3.5 bg-white/80 dark:bg-zinc-800 dark:text-white border border-blue-300 dark:border-zinc-700 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm shadow-sm">
+                                </div>
+                            </div>
+
+                            <div class="flex justify-between pt-4">
+                                <button type="button" onclick="playClickSound(); nextWizard(2)"
+                                    class="px-6 py-3.5 rounded-2xl border border-gray-300 dark:border-zinc-700 text-gray-700 dark:text-gray-300 font-semibold text-sm">
+                                    <i class="fa-solid fa-arrow-left mr-2"></i> Sebelumnya
+                                </button>
+
+                                <button type="submit"
+                                    class="px-8 py-3.5 rounded-2xl bg-gradient-to-r from-blue-500 to-sky-500 text-white font-bold shadow-lg hover-lift text-sm flex items-center gap-2">
+                                    <i class="fa-solid fa-floppy-disk"></i> Simpan Data Diri
+                                </button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </section>
+
+            <!-- TAB DATA MURID -->
+            <section id="tab-murid" class="tab-content hidden space-y-6">
+                <div class="glass-card rounded-3xl p-6 md:p-8 shadow-xl border border-blue-200 dark:border-zinc-700">
+
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                        <div>
+                            <span class="px-4 py-1.5 rounded-full text-xs font-bold bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300 uppercase tracking-wider">
+                                Direktori Siswa
+                            </span>
+
+                            <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900 dark:text-white mt-2">
+                                Daftar Nama Murid
+                            </h2>
+
+                            <p class="text-gray-600 dark:text-gray-300 text-sm">
+                                Daftar lengkap peserta didik yang terdaftar.
+                            </p>
+                        </div>
+
+                        <div class="flex flex-wrap items-center gap-3">
+
+                            <button onclick="playClickSound(); eksporKeExcel()"
+                                class="px-5 py-2.5 rounded-2xl bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold text-sm shadow-md hover-lift flex items-center gap-2">
+                                <i class="fa-solid fa-file-excel text-lg"></i> Ekspor ke Excel
+                            </button>
+
+                            <div class="relative flex-grow md:w-56">
+                                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-gray-400">
+                                    <i class="fa-solid fa-search text-xs"></i>
+                                </span>
+
+                                <input type="text" id="search-input" onkeyup="filterData()" placeholder="Cari nama siswa..."
+                                    class="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-zinc-800 dark:text-white border border-blue-300 dark:border-zinc-700 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm shadow-sm">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto rounded-2xl border border-blue-200 dark:border-zinc-700 bg-white/60 dark:bg-zinc-800/60">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-blue-100/70 dark:bg-zinc-700/70 text-blue-900 dark:text-blue-300 text-xs md:text-sm font-bold uppercase tracking-wider border-b border-blue-200 dark:border-zinc-700">
+                                    <th class="py-4 px-6">No</th>
+                                    <th class="py-4 px-6">Nama Lengkap Siswa</th>
+                                    <th class="py-4 px-6">Kelas</th>
+                                    <th class="py-4 px-6">Jurusan</th>
+                                    <th class="py-4 px-6 text-center">Aksi</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="tabel-body-siswa" class="divide-y divide-blue-100 dark:divide-zinc-700 text-sm text-gray-700 dark:text-gray-200"></tbody>
+                        </table>
+                    </div>
+
+                    <div id="empty-state" class="hidden text-center py-16">
+                        <div class="w-16 h-16 bg-blue-100 dark:bg-zinc-800 rounded-2xl flex items-center justify-center mx-auto text-blue-600 text-2xl mb-3 shadow-inner">
+                            <i class="fa-solid fa-folder-open"></i>
+                        </div>
+
+                        <h3 class="text-base font-bold text-gray-800 dark:text-white">
+                            Belum Ada Data Siswa
+                        </h3>
+
+                        <p class="text-gray-500 text-xs mt-1">
+                            Belum ada murid yang mengisi formulir.
+                        </p>
+
+                        <button onclick="playClickSound(); gantiTab('form')"
+                            class="mt-4 px-5 py-2.5 bg-blue-500 text-white font-bold text-xs rounded-xl shadow-md hover-lift">
+                            Isi Formulir Sekarang
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB DETAIL SISWA -->
+            <section id="tab-detail" class="tab-content hidden max-w-2xl mx-auto space-y-6">
+                <div class="glass-card rounded-3xl p-8 md:p-10 shadow-xl border border-blue-200 dark:border-zinc-700 relative overflow-hidden">
+
+                    <div class="flex items-center justify-between pb-6 border-b border-blue-200 dark:border-zinc-700 mb-6">
+                        <div>
+                            <span class="px-3 py-1 bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-300 text-xs font-bold rounded-full border border-blue-300 dark:border-blue-700">
+                                Detail Lengkap Siswa
+                            </span>
+
+                            <h2 class="text-2xl font-extrabold text-gray-900 dark:text-white mt-2" id="detail-nama">
+                                -
+                            </h2>
+                        </div>
+
+                        <div class="w-12 h-12 bg-gradient-to-tr from-blue-500 to-sky-400 rounded-2xl flex items-center justify-center text-white text-lg shadow-md">
+                            <i class="fa-solid fa-id-card"></i>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4 text-sm text-gray-700 dark:text-gray-300">
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 py-3 border-b border-blue-100 dark:border-zinc-700">
+                            <span class="font-semibold text-gray-500 dark:text-gray-400">Kelas</span>
+                            <span class="md:col-span-2 font-medium text-gray-900 dark:text-white" id="detail-kelas">-</span>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 py-3 border-b border-blue-100 dark:border-zinc-700">
+                            <span class="font-semibold text-gray-500 dark:text-gray-400">Program Keahlian</span>
+                            <span class="md:col-span-2 font-medium text-gray-900 dark:text-white" id="detail-jurusan">-</span>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 py-3 border-b border-blue-100 dark:border-zinc-700">
+                            <span class="font-semibold text-gray-500 dark:text-gray-400">Tempat, Tanggal Lahir</span>
+                            <span class="md:col-span-2 font-medium text-gray-900 dark:text-white" id="detail-ttl">-</span>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 py-3 border-b border-blue-100 dark:border-zinc-700">
+                            <span class="font-semibold text-gray-500 dark:text-gray-400">Alamat Lengkap</span>
+                            <span class="md:col-span-2 font-medium text-gray-900 dark:text-white" id="detail-alamat">-</span>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 py-3">
+                            <span class="font-semibold text-gray-500 dark:text-gray-400">No. Telepon / WA</span>
+                            <span class="md:col-span-2 font-medium text-gray-900 dark:text-white" id="detail-telepon">-</span>
+                        </div>
+                    </div>
+
+                    <div class="pt-8 mt-6 border-t border-blue-200 dark:border-zinc-700 flex flex-wrap items-center justify-between gap-4">
+
+                        <button onclick="playClickSound(); gantiTab('murid')"
+                            class="px-6 py-3 rounded-xl bg-white dark:bg-zinc-800 border border-blue-400 dark:border-blue-600 text-blue-800 dark:text-blue-300 font-bold text-sm hover:bg-blue-50 dark:hover:bg-zinc-700 hover-lift flex items-center gap-2 shadow-sm">
+                            <i class="fa-solid fa-arrow-left"></i> Kembali ke Daftar
+                        </button>
+
+                        <button onclick="playClickSound(); gantiTab('beranda')"
+                            class="px-6 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-sky-500 text-white font-bold text-sm hover-lift flex items-center gap-2 shadow-md">
+                            <i class="fa-solid fa-house"></i> Kembali ke Beranda
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB PROFIL SEKOLAH -->
+            <section id="tab-profil" class="tab-content hidden max-w-4xl mx-auto space-y-8">
+
+                <div class="glass-card rounded-3xl p-8 md:p-12 shadow-xl border border-blue-200 dark:border-zinc-700">
+
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-16 h-16 bg-gradient-to-tr from-blue-500 to-sky-400 rounded-2xl flex items-center justify-center text-white text-2xl font-bold shadow-md">
+                            <i class="fa-solid fa-school"></i>
+                        </div>
+
+                        <div>
+                            <span class="px-3 py-1 rounded-full text-xs font-bold bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-300">
+                                Profil Institusi
+                            </span>
+
+                            <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900 dark:text-white mt-1">
+                                SMK Banjar Asri Cimaung
+                            </h2>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4 text-gray-600 dark:text-gray-300 text-sm md:text-base leading-relaxed">
+
+                        <p>
+                            <strong>SMK Banjar Asri Cimaung</strong> berkomitmen mencetak lulusan yang unggul, terampil, berkarakter, dan siap bersaing di dunia kerja maupun berwirausaha mandiri di wilayah Cimaung, Kabupaten Bandung.
+                        </p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
+
+                            <div class="p-5 rounded-2xl bg-white/70 dark:bg-zinc-800/70 border border-blue-200 dark:border-zinc-700">
+                                <h4 class="font-bold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
+                                    <i class="fa-solid fa-location-dot text-blue-600"></i> Alamat Sekolah
+                                </h4>
+
+                                <p class="text-xs text-gray-600 dark:text-gray-300">
+                                    Jl. Raya Cimaung, Kec. Cimaung, Kabupaten Bandung, Jawa Barat.
+                                </p>
+                            </div>
+
+                            <div class="p-5 rounded-2xl bg-white/70 dark:bg-zinc-800/70 border border-blue-200 dark:border-zinc-700">
+                                <h4 class="font-bold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
+                                    <i class="fa-solid fa-envelope text-blue-600"></i> Kontak & Informasi
+                                </h4>
+
+                                <p class="text-xs text-gray-600 dark:text-gray-300">
+                                    Email: info@smkbanjarasricimaung.sch.id<br>
+                                    Telepon: (022) 555-xxxx
+                                </p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <footer class="mt-auto border-t border-blue-200 dark:border-zinc-800 bg-white/50 dark:bg-zinc-900/50 backdrop-blur-md py-6 text-center text-xs text-gray-500 dark:text-gray-400">
+            <p>&copy; 2026 <strong>SMK Banjar Asri Cimaung</strong>. Seluruh Hak Cipta Dilindungi.</p>
+        </footer>
+    </div>
+
+    <!-- ================= JAVASCRIPT ================= -->
+    <script>
+        const defaultSiswa = [
+            {
+                nama: "Siti Nurhaliza",
+                kelas: "XI (Sebelas)",
+                jurusan: "Rekayasa Perangkat Lunak (RPL)",
+                ttl: "Bandung, 12 Januari 2009",
+                alamat: "Kp. Pasirhuni RT 01/03, Cimaung",
+                telepon: "088123456789"
+            },
+            {
+                nama: "Ahmad Fauzan",
+                kelas: "XII (Duabelas)",
+                jurusan: "Teknik Komputer dan Jaringan (TKJ)",
+                ttl: "Bandung, 25 Mei 2007",
+                alamat: "Jl. Cimaung No. 45, Bandung",
+                telepon: "085987654321"
+            }
+        ];
+
+        if (!localStorage.getItem('data_siswa_smk')) {
+            localStorage.setItem('data_siswa_smk', JSON.stringify(defaultSiswa));
+        }
+
+        // Toast Notification System
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            const bgColor = type === 'success' 
+                ? 'bg-green-600 text-white' 
+                : 'bg-blue-600 text-white';
+
+            const icon = type === 'success' ? 'fa-circle-check' : 'fa-circle-info';
+
+            toast.className = `toast-animate pointer-events-auto flex items-center gap-3 px-5 py-3.5 rounded-2xl shadow-xl font-medium text-sm ${bgColor}`;
+            toast.innerHTML = `<i class="fa-solid ${icon} text-lg"></i> <span>${message}</span>`;
+            
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(100%)';
+                toast.transition = 'all 0.3s ease';
+
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Dark Mode Toggle
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+
+            const isDark = document.documentElement.classList.contains('dark');
+            const icon = document.getElementById('dark-icon');
+
+            icon.className = isDark 
+                ? 'fa-solid fa-sun text-lg' 
+                : 'fa-solid fa-moon text-lg';
+
+            localStorage.setItem('theme_dark', isDark);
+        }
+
+        if (localStorage.getItem('theme_dark') === 'true') {
+            document.documentElement.classList.add('dark');
+            document.getElementById('dark-icon').className = 'fa-solid fa-sun text-lg';
+        }
+
+        // Wizard Steps
+        function nextWizard(step) {
+            document.querySelectorAll('.wizard-step').forEach(el => el.classList.add('hidden'));
+            document.getElementById('wizard-step-' + step).classList.remove('hidden');
+
+            const progress = document.getElementById('wizard-progress');
+
+            if (step === 1) progress.style.width = '33.33%';
+            if (step === 2) progress.style.width = '66.66%';
+            if (step === 3) progress.style.width = '100%';
+        }
+
+        function masukWeb() {
+            const portal = document.getElementById('portal-page');
+            const mainApp = document.getElementById('main-app');
+
+            portal.style.opacity = '0';
+            portal.style.transform = 'scale(1.05)';
+            
+            setTimeout(() => {
+                portal.style.display = 'none';
+                mainApp.classList.remove('opacity-0', 'pointer-events-none');
+                muatDataSiswa();
+            }, 500);
+        }
+
+        function gantiTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
+            document.getElementById('tab-' + tabId).classList.remove('hidden');
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove(
+                    'text-blue-900',
+                    'bg-white',
+                    'dark:bg-zinc-700',
+                    'dark:text-blue-300',
+                    'shadow-sm'
+                );
+
+                btn.classList.add('text-gray-600', 'dark:text-gray-300');
+            });
+
+            const activeNav = document.getElementById('nav-' + tabId);
+
+            if (activeNav) {
+                activeNav.classList.remove('text-gray-600', 'dark:text-gray-300');
+
+                activeNav.classList.add(
+                    'text-blue-900',
+                    'bg-white',
+                    'dark:bg-zinc-700',
+                    'dark:text-blue-300',
+                    'shadow-sm'
+                );
+            }
+
+            if (tabId === 'murid') muatDataSiswa();
+            if (tabId === 'form') nextWizard(1);
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        }
+
+        function simpanData(event) {
+            event.preventDefault();
+
+            const nama = document.getElementById('nama').value.trim();
+            const kelas = document.getElementById('kelas').value;
+            const jurusan = document.getElementById('jurusan').value;
+            const tempatLahir = document.getElementById('tempat_lahir').value.trim();
+            const tanggalLahirInput = document.getElementById('tanggal_lahir').value;
+
+            // Format Tanggal dari YYYY-MM-DD ke Format Lokal Indonesia
+            let tanggalFormatted = tanggalLahirInput;
+
+            if (tanggalLahirInput) {
+                const parts = tanggalLahirInput.split('-');
+                const tahun = parts[0];
+                const bulanIndex = parseInt(parts[1], 10) - 1;
+                const hari = parts[2];
+
+                const namaBulan = [
+                    "Januari",
+                    "Februari",
+                    "Maret",
+                    "April",
+                    "Mei",
+                    "Juni",
+                    "Juli",
+                    "Agustus",
+                    "September",
+                    "Oktober",
+                    "November",
+                    "Desember"
+                ];
+
+                tanggalFormatted = `${hari} ${namaBulan[bulanIndex]} ${tahun}`;
+            }
+
+            const ttl = `${tempatLahir}, ${tanggalFormatted}`;
+            const alamat = document.getElementById('alamat').value.trim();
+            const telepon = document.getElementById('telepon').value.trim();
+
+            const dataBaru = {
+                nama,
+                kelas,
+                jurusan,
+                ttl,
+                alamat,
+                telepon
+            };
+
+            let dataSiswa = JSON.parse(localStorage.getItem('data_siswa_smk')) || [];
+
+            dataSiswa.unshift(dataBaru);
+
+            localStorage.setItem(
+                'data_siswa_smk',
+                JSON.stringify(dataSiswa)
+            );
+
+            document.getElementById('form-siswa').reset();
+
+            showToast('Data diri siswa berhasil disimpan!');
+
+            gantiTab('murid');
+        }
+
+        function muatDataSiswa(filterKeyword = '') {
+            const tbody = document.getElementById('tabel-body-siswa');
+            const emptyState = document.getElementById('empty-state');
+            const badgeCount = document.getElementById('badge-count');
+
+            let dataSiswa = JSON.parse(localStorage.getItem('data_siswa_smk')) || [];
+
+            badgeCount.innerText = dataSiswa.length;
+
+            if (filterKeyword) {
+                const keyword = filterKeyword.toLowerCase();
+
+                dataSiswa = dataSiswa.filter(
+                    s => s.nama.toLowerCase().includes(keyword)
+                );
+            }
+
+            tbody.innerHTML = '';
+
+            if (dataSiswa.length === 0) {
+                emptyState.classList.remove('hidden');
+                return;
+            } else {
+                emptyState.classList.add('hidden');
+            }
+
+            dataSiswa.forEach((siswa, index) => {
+                const tr = document.createElement('tr');
+
+                tr.className =
+                    "hover:bg-blue-50/50 dark:hover:bg-zinc-700/50 transition-colors";
+
+                tr.innerHTML = `
+                    <td class="py-4 px-6 font-medium text-gray-500 dark:text-gray-400">${index + 1}</td>
+
+                    <td class="py-4 px-6 font-bold text-gray-900 dark:text-white">
+                        ${siswa.nama}
+                    </td>
+
+                    <td class="py-4 px-6">
+                        ${siswa.kelas}
+                    </td>
+
+                    <td class="py-4 px-6 text-xs text-gray-600 dark:text-gray-300">
+                        ${siswa.jurusan}
+                    </td>
+
+                    <td class="py-4 px-6 text-center">
+                        <div class="inline-flex items-center gap-2">
+
+                            <button onclick="playClickSound(); lihatDetail(${index})"
+                                class="px-3.5 py-1.5 rounded-xl bg-blue-500 text-white font-semibold text-xs shadow-sm hover:bg-blue-600 transition-all hover-lift flex items-center gap-1.5">
+                                <i class="fa-solid fa-eye"></i> Detail
+                            </button>
+
+                            <button onclick="playClickSound(); hapusSiswa(${index})"
+                                class="px-2.5 py-1.5 rounded-xl bg-red-100 text-red-600 dark:bg-red-900/50 dark:text-red-400 hover:bg-red-200 transition-all text-xs"
+                                title="Hapus">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+
+                        </div>
+                    </td>
+                `;
+
+                tbody.appendChild(tr);
+            });
+        }
+
+        function lihatDetail(index) {
+            let dataSiswa =
+                JSON.parse(localStorage.getItem('data_siswa_smk')) || [];
+
+            const siswa = dataSiswa[index];
+
+            if (!siswa) return;
+
+            document.getElementById('detail-nama').innerText = siswa.nama;
+            document.getElementById('detail-kelas').innerText = siswa.kelas;
+            document.getElementById('detail-jurusan').innerText = siswa.jurusan;
+            document.getElementById('detail-ttl').innerText = siswa.ttl;
+            document.getElementById('detail-alamat').innerText = siswa.alamat;
+            document.getElementById('detail-telepon').innerText = siswa.telepon;
+
+            gantiTab('detail');
+        }
+
+        function filterData() {
+            muatDataSiswa(
+                document.getElementById('search-input').value
+            );
+        }
+
+        function hapusSiswa(index) {
+            if (confirm('Apakah Anda yakin ingin menghapus data siswa ini?')) {
+
+                let dataSiswa =
+                    JSON.parse(localStorage.getItem('data_siswa_smk')) || [];
+
+                dataSiswa.splice(index, 1);
+
+                localStorage.setItem(
+                    'data_siswa_smk',
+                    JSON.stringify(dataSiswa)
+                );
+
+                muatDataSiswa();
+
+                showToast('Data berhasil dihapus', 'info');
+            }
+        }
+
+        function eksporKeExcel() {
+            let dataSiswa =
+                JSON.parse(localStorage.getItem('data_siswa_smk')) || [];
+
+            if (dataSiswa.length === 0) {
+                showToast('Tidak ada data untuk diexport!', 'info');
+                return;
+            }
+
+            let formattedData = dataSiswa.map((s, i) => ({
+                "No": i + 1,
+                "Nama Lengkap Siswa": s.nama,
+                "Kelas": s.kelas,
+                "Program Keahlian (Jurusan)": s.jurusan,
+                "Tempat, Tanggal Lahir": s.ttl,
+                "Alamat Lengkap": s.alamat,
+                "Nomor Telepon / WA": s.telepon
+            }));
+
+            const ws = XLSX.utils.json_to_sheet(formattedData);
+
+            ws['!cols'] = [
+                { wch: 5 },
+                { wch: 30 },
+                { wch: 15 },
+                { wch: 35 },
+                { wch: 25 },
+                { wch: 45 },
+                { wch: 20 }
+            ];
+
+            const wb = XLSX.utils.book_new();
+
+            XLSX.utils.book_append_sheet(
+                wb,
+                ws,
+                "Data Siswa SMK Banjar Asri"
+            );
+
+            const tanggalStr =
+                new Date().toISOString().slice(0, 10);
+
+            XLSX.writeFile(
+                wb,
+                `Data_Siswa_SMK_BanjarAsri_${tanggalStr}.xlsx`
+            );
+
+            showToast('Laporan Excel berhasil diunduh!');
+        }
+    </script>
+  <!-- ==========================================================
+       BAGIAN 3: JAVASCRIPT (LOGIKA)
+       Alurnya:
+         1. Hubungkan ke Supabase
+         2. Ambil data siswa
+         3. Gambar kartu di halaman
+         4. Perbarui kartu saat pengunjung mencari / memfilter
+       ========================================================== -->
+  <script>
+    // ---------- LANGKAH 1: PENGATURAN ----------
+    // Ganti dua nilai ini dengan milik projectmu
+    // (Supabase > Settings > API > Project URL dan anon key).
+    // Anon key AMAN ditaruh di sini karena yang melindungi data
+    // adalah aturan RLS di Supabase, bukan kerahasiaan key ini.
+    // JANGAN PERNAH menaruh "service_role key" di file ini.
+    const SUPABASE_URL = "https://aruyqnbyfxanjkgndsxg.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_iS3JUDPSPYMHwSr6VKw1Bw_HHM2ty7H";
+</body>
+</html>
